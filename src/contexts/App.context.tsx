@@ -56,7 +56,7 @@ const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
     setMealPlan(mealPlan);
   };
 
-  const handleGroceryListCheck = (key: string, checked: boolean) => {
+  const handleGroceryListCheck = async (key: string, checked: boolean) => {
     if (!mealPlan) {
       return;
     }
@@ -67,9 +67,8 @@ const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     setMealPlan(newMealPlan);
 
-    markGroceryListItem(key, checked).then((mealPlan) => {
-      setMealPlan(mealPlan);
-    });
+    await markGroceryListItem(key, checked);
+    await refetchMealData();
   };
 
   useEffect(() => {
