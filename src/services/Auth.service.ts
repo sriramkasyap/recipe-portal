@@ -7,6 +7,7 @@ export const login = async (credentialResponse: CredentialResponse) => {
     headers: {
       "Content-Type": "application/json",
     },
+    credentials: "include",
   });
 
   return response.json();
@@ -14,7 +15,9 @@ export const login = async (credentialResponse: CredentialResponse) => {
 
 export const verifyUser = async () => {
   try {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/me`);
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/me`, {
+      credentials: "include",
+    });
 
     let result = await response.json();
 

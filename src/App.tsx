@@ -1,5 +1,4 @@
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import "./App.css";
 import { AppContextProvider } from "./contexts/App.context";
 import Router from "./Router";
 
