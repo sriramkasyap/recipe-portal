@@ -6,12 +6,14 @@ export type Recipe = {
 
 export type MealPlan = {
   recipes: Recipe[];
+  groceryList: GroceryList;
 };
 
 export type GroceryItem = {
   name: string;
   quantity: number;
   units: string;
+  checked: boolean;
 };
 
 export type GroceryList = {

@@ -3,7 +3,7 @@ import { useAppContext } from "../contexts/App.context";
 import useAddRecipeToMeal from "../hooks/useAddRecipeToMeal";
 
 const RecipeCard = () => {
-  const { recipeInFocus, setRecipeInFocus } = useAppContext();
+  const { recipeInFocus, setRecipeInFocus, mealPlan } = useAppContext();
 
   const { handleAddToMealPlan, addingToMealPlan } = useAddRecipeToMeal();
 
@@ -42,11 +42,28 @@ const RecipeCard = () => {
 
             <div className="flex flex-col gap-2 my-2">
               <button
-                className="bg-gray-900 text-white px-4 py-2 rounded-md text-sm hover:bg-gray-700 transition-colors duration-300"
+                className={`bg-gray-900 text-white px-4 py-2 rounded-md text-sm  transition-colors duration-300 ${
+                  mealPlan?.recipes.some(
+                    (recipe) => recipe._id === recipeInFocus._id
+                  )
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "hover:bg-gray-700"
+                }`}
                 onClick={handleAddToMealPlan}
-                disabled={addingToMealPlan}
+                disabled={
+                  addingToMealPlan ||
+                  mealPlan?.recipes.some(
+                    (recipe) => recipe._id === recipeInFocus._id
+                  )
+                }
               >
-                {addingToMealPlan ? "Adding..." : "Add to Meal Plan"}
+                {mealPlan?.recipes.some(
+                  (recipe) => recipe._id === recipeInFocus._id
+                )
+                  ? "Added"
+                  : addingToMealPlan
+                  ? "Adding..."
+                  : "Add to Meal Plan"}
               </button>
             </div>
           </div>

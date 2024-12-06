@@ -1,23 +1,33 @@
-import { FaTrashAlt } from "react-icons/fa";
-import { useAppContext } from "../contexts/App.context";
+import { useState } from "react";
+import GroceryListCard from "./GroceryListCard";
+import MealPlanCard from "./MealPlanCard";
 
 const GroceryListColumn = () => {
-  const { mealPlan } = useAppContext();
-
+  const [activeTab, setActiveTab] = useState<"mealPlan" | "groceryList">(
+    "mealPlan"
+  );
   return (
-    <div className="gap-10 border-l border-gray-300 px-2  flex-1 bg-gray-100 py-48">
-      <h2 className="text-4xl font-bold text-center my-2">My Meal Plan</h2>
-
-      <div className="flex flex-row flex-wrap gap-10 justify-center items-center my-10">
-        {mealPlan?.recipes.map((recipe) => (
-          <div className="border border-gray-300 rounded-md py-2 px-3 bg-white flex flex-row justify-between items-center gap-4">
-            <p className="text-base font-medium">{recipe.title}</p>
-            <button className="text-red-500 hover:text-red-600">
-              <FaTrashAlt />
-            </button>
-          </div>
-        ))}
+    <div className=" border-l border-gray-300 px-2  flex-[2] bg-gray-100 py-10 flex flex-col items-center">
+      <div className="flex flex-row gap-4 justify-center">
+        <button
+          className={`text-sm px-4 py-1 rounded-2xl cursor-pointer border-blue-500 border ${
+            activeTab === "mealPlan" ? "text-white bg-blue-500" : ""
+          }`}
+          onClick={() => setActiveTab("mealPlan")}
+        >
+          Meal Plan
+        </button>
+        <button
+          className={`text-sm px-4 py-1 rounded-2xl cursor-pointer border-blue-500 border ${
+            activeTab === "groceryList" ? "text-white bg-blue-500" : ""
+          }`}
+          onClick={() => setActiveTab("groceryList")}
+        >
+          Grocery List
+        </button>
       </div>
+      {activeTab === "mealPlan" && <MealPlanCard />}
+      {activeTab === "groceryList" && <GroceryListCard />}
     </div>
   );
 };

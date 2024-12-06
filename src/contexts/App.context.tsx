@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getMealPlanAndGroceryList } from "../services/API.service";
+import { getMealPlan, markGroceryListItem } from "../services/API.service";
 import { login, verifyUser } from "../services/Auth.service";
-import { GroceryList, MealPlan, Recipe } from "../types/Recipe.type";
+import { MealPlan, Recipe } from "../types/Recipe.type";
 import { CredentialResponse, User } from "../types/User.type";
 type AppContextType = {
   user: User | null;
@@ -11,8 +11,8 @@ type AppContextType = {
   recipeInFocus: Recipe | null;
   setRecipeInFocus: (recipe: Recipe | null) => void;
   mealPlan: MealPlan | null;
-  groceryList: GroceryList | null;
   refetchMealData: () => Promise<void>;
+  handleGroceryListCheck: (key: string, checked: boolean) => void;
 };
 
 const AppContext = createContext<AppContextType>({
@@ -23,7 +23,7 @@ const AppContext = createContext<AppContextType>({
   recipeInFocus: null,
   setRecipeInFocus: () => {},
   mealPlan: null,
-  groceryList: null,
+  handleGroceryListCheck: () => {},
   refetchMealData: async () => {},
 });
 
@@ -32,7 +32,6 @@ const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [verifyingUser, setVerifyingUser] = useState(true);
   const [recipeInFocus, setRecipeInFocus] = useState<Recipe | null>(null);
   const [mealPlan, setMealPlan] = useState<MealPlan | null>(null);
-  const [groceryList, setGroceryList] = useState<GroceryList | null>(null);
 
   const handleAuthSuccess = (credentialResponse: CredentialResponse) => {
     if (!credentialResponse || !credentialResponse.credential) {
@@ -53,9 +52,24 @@ const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const refetchMealData = async () => {
-    const { mealPlan, groceryList } = await getMealPlanAndGroceryList();
+    const mealPlan = await getMealPlan();
     setMealPlan(mealPlan);
-    setGroceryList(groceryList);
+  };
+
+  const handleGroceryListCheck = (key: string, checked: boolean) => {
+    if (!mealPlan) {
+      return;
+    }
+    const newMealPlan = { ...mealPlan };
+    if (newMealPlan?.groceryList) {
+      newMealPlan.groceryList[key].checked = checked;
+    }
+
+    setMealPlan(newMealPlan);
+
+    markGroceryListItem(key, checked).then((mealPlan) => {
+      setMealPlan(mealPlan);
+    });
   };
 
   useEffect(() => {
@@ -76,8 +90,8 @@ const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
     recipeInFocus,
     setRecipeInFocus,
     mealPlan,
-    groceryList,
     refetchMealData,
+    handleGroceryListCheck,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

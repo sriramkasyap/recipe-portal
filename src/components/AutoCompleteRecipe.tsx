@@ -62,7 +62,7 @@ const AutoCompleteRecipe = () => {
       )}
 
       {suggestions.length > 0 && (
-        <div className="absolute w-full mx-auto bg-white border border-gray-300 rounded-br-2xl rounded-bl-2xl shadow-lg">
+        <div className="absolute w-full mx-auto bg-white border border-gray-300 rounded-br-2xl rounded-bl-2xl shadow-lg z-50">
           {suggestions.map((suggestion, index) => (
             <div
               key={index}
