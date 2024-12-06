@@ -1,8 +1,11 @@
 import { FaTimes } from "react-icons/fa";
 import { useAppContext } from "../contexts/App.context";
+import useAddRecipeToMeal from "../hooks/useAddRecipeToMeal";
 
 const RecipeCard = () => {
   const { recipeInFocus, setRecipeInFocus } = useAppContext();
+
+  const { handleAddToMealPlan, addingToMealPlan } = useAddRecipeToMeal();
 
   return (
     recipeInFocus && (
@@ -22,18 +25,30 @@ const RecipeCard = () => {
             <p className="text-base font-medium text-gray-700 mt-2 mb-1 text-center underline underline-offset-4 decoration-gray-400">
               Ingredients
             </p>
-            {Object.values(recipeInFocus?.ingredients).map((ingredient) => (
-              <p
-                key={ingredient._id || ingredient.name}
-                className="text-sm text-gray-500"
+            <div className="flex flex-col gap-2 items-center">
+              {Object.values(recipeInFocus?.ingredients).map((ingredient) => (
+                <p
+                  key={ingredient._id || ingredient.name}
+                  className="text-sm text-gray-500"
+                >
+                  {ingredient.name}{" "}
+                  {ingredient.quantity &&
+                    ingredient.quantity > 0 &&
+                    `x ${ingredient.quantity}`}
+                  {ingredient.units && ` ${ingredient.units}`}
+                </p>
+              ))}
+            </div>
+
+            <div className="flex flex-col gap-2 my-2">
+              <button
+                className="bg-gray-900 text-white px-4 py-2 rounded-md text-sm hover:bg-gray-700 transition-colors duration-300"
+                onClick={handleAddToMealPlan}
+                disabled={addingToMealPlan}
               >
-                {ingredient.name}{" "}
-                {ingredient.quantity &&
-                  ingredient.quantity > 0 &&
-                  `x ${ingredient.quantity}`}
-                {ingredient.units && ` ${ingredient.units}`}
-              </p>
-            ))}
+                {addingToMealPlan ? "Adding..." : "Add to Meal Plan"}
+              </button>
+            </div>
           </div>
         </div>
       </div>

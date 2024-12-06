@@ -1,15 +1,15 @@
-import AutoCompleteRecipe from "../components/AutoCompleteRecipe";
-import RecipeCard from "../components/RecipeCard";
+import GroceryListColumn from "../components/GroceryListColumn";
+import SearchColumn from "../components/SearchColumn";
+import { useAppContext } from "../contexts/App.context";
 
 const HomeScreen = () => {
+  const { mealPlan, groceryList } = useAppContext();
   return (
-    <div className="flex w-full h-screen flex-col justify-center items-center gap-10">
-      <h1 className="text-4xl font-bold text-center">Welcome to VivaRecipes</h1>
-      <p className="text-lg text-center">
-        Search your favorite recipes and add them to your meal plan
-      </p>
-      <AutoCompleteRecipe />
-      <RecipeCard />
+    <div className="flex w-full h-screen flex-row justify-center items-stretch gap-10">
+      <SearchColumn />
+      {mealPlan && groceryList && mealPlan.recipes.length > 0 && (
+        <GroceryListColumn />
+      )}
     </div>
   );
 };

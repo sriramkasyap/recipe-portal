@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { getMealPlanAndGroceryList } from "../services/API.service";
 import { login, verifyUser } from "../services/Auth.service";
-import { Recipe } from "../types/Recipe.type";
+import { GroceryList, MealPlan, Recipe } from "../types/Recipe.type";
 import { CredentialResponse, User } from "../types/User.type";
 type AppContextType = {
   user: User | null;
@@ -9,6 +10,9 @@ type AppContextType = {
   handleAuthError: () => void;
   recipeInFocus: Recipe | null;
   setRecipeInFocus: (recipe: Recipe | null) => void;
+  mealPlan: MealPlan | null;
+  groceryList: GroceryList | null;
+  refetchMealData: () => Promise<void>;
 };
 
 const AppContext = createContext<AppContextType>({
@@ -18,12 +22,17 @@ const AppContext = createContext<AppContextType>({
   handleAuthError: () => {},
   recipeInFocus: null,
   setRecipeInFocus: () => {},
+  mealPlan: null,
+  groceryList: null,
+  refetchMealData: async () => {},
 });
 
 const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [verifyingUser, setVerifyingUser] = useState(true);
   const [recipeInFocus, setRecipeInFocus] = useState<Recipe | null>(null);
+  const [mealPlan, setMealPlan] = useState<MealPlan | null>(null);
+  const [groceryList, setGroceryList] = useState<GroceryList | null>(null);
 
   const handleAuthSuccess = (credentialResponse: CredentialResponse) => {
     if (!credentialResponse || !credentialResponse.credential) {
@@ -32,7 +41,8 @@ const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     setVerifyingUser(true);
 
-    login(credentialResponse).then((user: User) => {
+    login(credentialResponse).then(async (user: User) => {
+      await refetchMealData();
       setCurrentUser(user);
       setVerifyingUser(false);
     });
@@ -42,9 +52,18 @@ const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
     console.log("Google Login Failed");
   };
 
+  const refetchMealData = async () => {
+    const { mealPlan, groceryList } = await getMealPlanAndGroceryList();
+    setMealPlan(mealPlan);
+    setGroceryList(groceryList);
+  };
+
   useEffect(() => {
-    verifyUser().then((user: User) => {
-      setCurrentUser(user);
+    verifyUser().then(async (user: User) => {
+      if (user) {
+        await refetchMealData();
+        setCurrentUser(user);
+      }
       setVerifyingUser(false);
     });
   }, []);
@@ -56,6 +75,9 @@ const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
     handleAuthError,
     recipeInFocus,
     setRecipeInFocus,
+    mealPlan,
+    groceryList,
+    refetchMealData,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
