@@ -19,7 +19,7 @@ const RecipeCard = () => {
             {recipeInFocus?.title}
           </h5>
           <div className="flex flex-col gap-2 items-center">
-            <p className="text-base font-medium text-gray-700 my-2 text-center">
+            <p className="text-base font-medium text-gray-700 mt-2 mb-1 text-center underline underline-offset-4 decoration-gray-400">
               Ingredients
             </p>
             {Object.values(recipeInFocus?.ingredients).map((ingredient) => (

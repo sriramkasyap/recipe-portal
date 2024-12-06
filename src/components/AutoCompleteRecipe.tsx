@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useAppContext } from "../contexts/App.context";
-import { getRecipes } from "../services/Recipe.service";
+import { getRecipes } from "../services/API.service";
 import { Recipe } from "../types/Recipe.type";
 
 const AutoCompleteRecipe = () => {
