@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from "react";
+import { useAppContext } from "../contexts/App.context";
 import { getRecipes } from "../services/Recipe.service";
 import { Recipe } from "../types/Recipe.type";
 
 const AutoCompleteRecipe = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<Recipe[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const timeoutRef = useRef<any>();
+  const { setRecipeInFocus } = useAppContext();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim();
@@ -26,7 +28,7 @@ const AutoCompleteRecipe = () => {
       if (value) {
         const recipes = await getRecipes(value);
 
-        setSuggestions(recipes.map((recipe: Recipe) => recipe.title));
+        setSuggestions(recipes);
       } else {
         setSuggestions([]);
       }
@@ -66,10 +68,12 @@ const AutoCompleteRecipe = () => {
               key={index}
               className="p-3 hover:bg-gray-100 cursor-pointer text-center border-gray-300"
               onClick={() => {
-                // TODO: Implement suggestion selection
+                setRecipeInFocus(suggestion);
+                setSuggestions([]);
+                inputRef.current && (inputRef.current.value = "");
               }}
             >
-              <p className="text-center">{suggestion}</p>
+              <p className="text-center">{suggestion.title}</p>
             </div>
           ))}
         </div>

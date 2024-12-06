@@ -1,4 +1,5 @@
 import AutoCompleteRecipe from "../components/AutoCompleteRecipe";
+import RecipeCard from "../components/RecipeCard";
 
 const HomeScreen = () => {
   return (
@@ -8,6 +9,7 @@ const HomeScreen = () => {
         Search your favorite recipes and add them to your meal plan
       </p>
       <AutoCompleteRecipe />
+      <RecipeCard />
     </div>
   );
 };
