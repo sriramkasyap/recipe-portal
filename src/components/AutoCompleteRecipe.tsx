@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useAppContext } from "../contexts/App.context";
 import { getRecipes } from "../services/API.service";
 import { Recipe } from "../types/Recipe.type";
@@ -35,10 +35,6 @@ const AutoCompleteRecipe = () => {
       setIsLoading(false);
     }, 300);
   };
-
-  useEffect(() => {
-    console.log(suggestions);
-  }, [suggestions]);
 
   return (
     <div className="relative w-full max-w-md">
