@@ -7,7 +7,7 @@ const GroceryListColumn = () => {
     "mealPlan"
   );
   return (
-    <div className=" border-l border-gray-300 px-2  flex-[2] bg-gray-100 py-10 flex flex-col items-center">
+    <div className=" border-l border-gray-300 px-2  flex-[2] bg-gray-100 py-24 flex flex-col items-center">
       <div className="flex flex-row gap-4 justify-center">
         <button
           className={`text-sm px-4 py-1 rounded-2xl cursor-pointer border-blue-500 border ${

@@ -99,3 +99,25 @@ export const markGroceryListItem = async (
 
   return result.mealPlan;
 };
+
+export const generateRecipe = async (title: string) => {
+  const response = await fetch(
+    `${process.env.REACT_APP_API_URL}/recipes/generate`,
+    {
+      method: "POST",
+      body: JSON.stringify({ title }),
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  const result = await response.json();
+
+  if (!result.success) {
+    throw new Error(result.message);
+  }
+
+  return result.recipe;
+};
