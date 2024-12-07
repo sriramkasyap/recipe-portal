@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppContext } from "../contexts/App.context";
 import useGenerateRecipe from "../hooks/useGenerateRecipe";
 import { getRecipes } from "../services/API.service";
@@ -10,6 +10,7 @@ const AutoCompleteRecipe = () => {
   const [suggestions, setSuggestions] = useState<Recipe[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const timeoutRef = useRef<any>();
+  const inputRef = useRef<HTMLInputElement>(null);
   const { setRecipeInFocus } = useAppContext();
 
   const { generatingRecipe, handleGenerateRecipe } =
@@ -49,10 +50,15 @@ const AutoCompleteRecipe = () => {
     }, 300);
   };
 
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
   return (
-    <div className="relative w-full max-w-md">
+    <div className="relative w-full max-w-md my-5">
       <input
         type="text"
+        ref={inputRef}
         value={inputText}
         onChange={handleInputChange}
         placeholder="Hot and Sour Soup, Lauki Kofta Curry..."
