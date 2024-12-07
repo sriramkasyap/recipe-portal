@@ -6,7 +6,7 @@ const GroceryListCard = () => {
   return (
     <div className="flex flex-col gap-2 items-center py-4">
       <h3 className="text-2xl font-bold text-center my-2">Grocery List</h3>
-      <div className="bg-white rounded-md p-4 border border-gray-300 shadow-md w-full max-w-fit min-w-96 max-h-[80vh] overflow-y-auto">
+      <div className="bg-white rounded-md p-4 border border-gray-300 shadow-md w-full max-w-fit min-w-80 md:min-w-96 max-h-[80vh] overflow-y-auto">
         <table className="w-full">
           <thead>
             <tr className="border-b border-gray-200">
