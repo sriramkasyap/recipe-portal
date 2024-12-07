@@ -21,9 +21,9 @@ const MealPlanCard = () => {
             <button
               className="text-red-500 hover:text-red-600"
               onClick={() => handleRemoveRecipe(recipe._id)}
-              disabled={removingRecipe}
+              disabled={removingRecipe === recipe._id}
             >
-              {removingRecipe ? <FaSpinner /> : <FaTrashAlt />}
+              {removingRecipe === recipe._id ? <FaSpinner /> : <FaTrashAlt />}
             </button>
           </div>
         ))}

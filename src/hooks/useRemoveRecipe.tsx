@@ -3,14 +3,14 @@ import { useAppContext } from "../contexts/App.context";
 import { removeRecipeFromMealPlan } from "../services/API.service";
 
 const useRemoveRecipe = () => {
-  const [removingRecipe, setRemovingRecipe] = useState(false);
+  const [removingRecipe, setRemovingRecipe] = useState<string | null>(null);
   const { refetchMealData } = useAppContext();
 
   const handleRemoveRecipe = async (recipeId: string) => {
-    setRemovingRecipe(true);
+    setRemovingRecipe(recipeId);
     await removeRecipeFromMealPlan(recipeId);
     await refetchMealData();
-    setRemovingRecipe(false);
+    setRemovingRecipe(null);
   };
 
   return { handleRemoveRecipe, removingRecipe };
