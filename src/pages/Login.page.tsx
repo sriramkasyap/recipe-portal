@@ -12,7 +12,7 @@ const LoginScreen = () => {
         <p className="text-2xl font-medium text-center">
           Sign in to your account to get started
         </p>
-        <div className="w-full my-10">
+        <div className="w-full my-10 flex justify-center">
           <GoogleLogin
             onSuccess={handleAuthSuccess}
             onError={handleAuthError}
