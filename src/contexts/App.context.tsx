@@ -76,7 +76,8 @@ const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
   const handleLogout = async () => {
     setVerifyingUser(true);
     await logout();
-    await refetchMealData();
+    setMealPlan(null);
+    setRecipeInFocus(null);
     setCurrentUser(null);
     setVerifyingUser(false);
   };
