@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { getMealPlan, markGroceryListItem } from "../services/API.service";
-import { login, verifyUser } from "../services/Auth.service";
+import { login, logout, verifyUser } from "../services/Auth.service";
 import { MealPlan, Recipe } from "../types/Recipe.type";
 import { CredentialResponse, User } from "../types/User.type";
 type AppContextType = {
@@ -13,6 +13,7 @@ type AppContextType = {
   mealPlan: MealPlan | null;
   refetchMealData: () => Promise<void>;
   handleGroceryListCheck: (key: string, checked: boolean) => void;
+  handleLogout: () => Promise<void>;
 };
 
 const AppContext = createContext<AppContextType>({
@@ -25,6 +26,7 @@ const AppContext = createContext<AppContextType>({
   mealPlan: null,
   handleGroceryListCheck: () => {},
   refetchMealData: async () => {},
+  handleLogout: async () => {},
 });
 
 const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
@@ -71,6 +73,14 @@ const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
     await refetchMealData();
   };
 
+  const handleLogout = async () => {
+    setVerifyingUser(true);
+    await logout();
+    await refetchMealData();
+    setCurrentUser(null);
+    setVerifyingUser(false);
+  };
+
   useEffect(() => {
     verifyUser().then(async (user: User) => {
       if (user) {
@@ -91,6 +101,7 @@ const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
     mealPlan,
     refetchMealData,
     handleGroceryListCheck,
+    handleLogout,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

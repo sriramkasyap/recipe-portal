@@ -30,3 +30,12 @@ export const verifyUser = async () => {
     return null;
   }
 };
+
+export const logout = async () => {
+  const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/logout`, {
+    method: "POST",
+    credentials: "include",
+  });
+
+  return response.json();
+};
