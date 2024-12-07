@@ -7,7 +7,7 @@ const SearchColumn = () => {
   const { recipeInFocus, handleLogout, verifyingUser } = useAppContext();
 
   return (
-    <div className="h-full">
+    <div className="h-full md:h-screen w-full md:flex-[3]">
       <div className="flex flex-row gap-4 p-5">
         <button
           onClick={handleLogout}
@@ -17,7 +17,7 @@ const SearchColumn = () => {
           {verifyingUser ? <FaSpinner /> : "Logout"}
         </button>
       </div>
-      <div className="flex flex-col gap-5 flex-[3] justify-center items-center p-4 pb-10 md:pb-48 h-full">
+      <div className="flex flex-col gap-5 justify-center items-center p-4 pb-10 md:pb-96 h-full">
         <img src="/VivaRecipe.png" alt="Viva Recipes" className="w-48" />
         <h1 className="md:text-4xl text-3xl font-bold text-center">
           Welcome to VivaRecipe
