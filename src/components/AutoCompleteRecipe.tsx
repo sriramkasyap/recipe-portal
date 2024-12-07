@@ -63,7 +63,7 @@ const AutoCompleteRecipe = () => {
         onChange={handleInputChange}
         placeholder="Hot and Sour Soup, Lauki Kofta Curry..."
         className={
-          "w-full p-3 border text-center text-xl border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent " +
+          "w-full p-2 md:p-3 border text-center text-lg md:text-xl border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent " +
           (suggestions.length > 0
             ? "rounded-tr-3xl rounded-tl-3xl"
             : "rounded-3xl")
