@@ -39,3 +39,14 @@ export const logout = async () => {
 
   return response.json();
 };
+
+export const heartbeat = async () => {
+  const response = await fetch(
+    `${process.env.REACT_APP_API_URL}/auth/heartbeat`,
+    {
+      credentials: "include",
+    }
+  );
+
+  return response.json();
+};

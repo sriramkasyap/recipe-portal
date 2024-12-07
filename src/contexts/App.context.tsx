@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { getMealPlan, markGroceryListItem } from "../services/API.service";
-import { login, logout, verifyUser } from "../services/Auth.service";
+import { heartbeat, login, logout, verifyUser } from "../services/Auth.service";
 import { MealPlan, Recipe } from "../types/Recipe.type";
 import { CredentialResponse, User } from "../types/User.type";
 type AppContextType = {
@@ -90,6 +90,10 @@ const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
       }
       setVerifyingUser(false);
     });
+
+    setInterval(() => {
+      heartbeat();
+    }, 15000);
   }, []);
 
   const value: AppContextType = {
