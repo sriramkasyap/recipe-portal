@@ -13,7 +13,10 @@ const MealPlanCard = () => {
 
       <div className="flex flex-col gap-2 justify-center items-center p-4">
         {mealPlan?.recipes.map((recipe) => (
-          <div className="border border-gray-300 rounded-md py-2 px-3 bg-white flex flex-row justify-between items-center gap-4 max-w-fit min-w-72">
+          <div
+            key={recipe._id}
+            className="border border-gray-300 rounded-md py-2 px-3 bg-white flex flex-row justify-between items-center gap-4 max-w-fit min-w-72"
+          >
             <p className="text-base font-medium">{recipe.title}</p>
             <button
               className="text-red-500 hover:text-red-600"

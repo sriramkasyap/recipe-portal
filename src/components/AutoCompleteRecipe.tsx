@@ -1,20 +1,28 @@
 import { useRef, useState } from "react";
 import { useAppContext } from "../contexts/App.context";
+import useGenerateRecipe from "../hooks/useGenerateRecipe";
 import { getRecipes } from "../services/API.service";
 import { Recipe } from "../types/Recipe.type";
 
 const AutoCompleteRecipe = () => {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [inputText, setInputText] = useState("");
+  const [showGenerateRecipe, setShowGenerateRecipe] = useState(false);
   const [suggestions, setSuggestions] = useState<Recipe[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const timeoutRef = useRef<any>();
   const { setRecipeInFocus } = useAppContext();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.trim();
+  const { generatingRecipe, handleGenerateRecipe } =
+    useGenerateRecipe(inputText);
 
-    if (!value || value.length < 3) {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    setInputText(value);
+
+    if (!value || value.trim().length < 3) {
       setSuggestions([]);
+      setShowGenerateRecipe(false);
       return;
     }
 
@@ -25,10 +33,15 @@ const AutoCompleteRecipe = () => {
     }
 
     timeoutRef.current = setTimeout(async () => {
+      setShowGenerateRecipe(false);
       if (value) {
-        const recipes = await getRecipes(value);
+        const recipes = await getRecipes(value.trim());
 
         setSuggestions(recipes);
+
+        if (recipes.length === 0) {
+          setShowGenerateRecipe(true);
+        }
       } else {
         setSuggestions([]);
       }
@@ -40,7 +53,7 @@ const AutoCompleteRecipe = () => {
     <div className="relative w-full max-w-md">
       <input
         type="text"
-        ref={inputRef}
+        value={inputText}
         onChange={handleInputChange}
         placeholder="Hot and Sour Soup, Lauki Kofta Curry..."
         className={
@@ -57,7 +70,7 @@ const AutoCompleteRecipe = () => {
         </div>
       )}
 
-      {suggestions.length > 0 && (
+      {suggestions.length > 0 ? (
         <div className="absolute w-full mx-auto bg-white border border-gray-300 rounded-br-2xl rounded-bl-2xl shadow-lg z-50">
           {suggestions.map((suggestion, index) => (
             <div
@@ -66,13 +79,36 @@ const AutoCompleteRecipe = () => {
               onClick={() => {
                 setRecipeInFocus(suggestion);
                 setSuggestions([]);
-                inputRef.current && (inputRef.current.value = "");
+                setInputText("");
               }}
             >
               <p className="text-center">{suggestion.title}</p>
             </div>
           ))}
         </div>
+      ) : (
+        showGenerateRecipe && (
+          <>
+            <div className="flex flex-col gap-4 items-center my-4">
+              <p className="text-lg text-center">
+                Didn't find the dish you are looking for?
+              </p>
+              <div className="my-2 flex flex-col gap-4 items-center w-full">
+                <button
+                  onClick={async () => {
+                    await handleGenerateRecipe();
+                    setInputText("");
+                    setShowGenerateRecipe(false);
+                  }}
+                  className="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-900 transition-colors duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  disabled={generatingRecipe}
+                >
+                  {generatingRecipe ? "Generating..." : "Generate Recipe"}
+                </button>
+              </div>
+            </div>
+          </>
+        )
       )}
     </div>
   );

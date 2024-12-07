@@ -1,6 +1,5 @@
 import { useAppContext } from "../contexts/App.context";
 import AutoCompleteRecipe from "./AutoCompleteRecipe";
-import GenerateRecipeBlock from "./GenerateRecipeBlock";
 import RecipeCard from "./RecipeCard";
 
 const SearchColumn = () => {
@@ -13,7 +12,7 @@ const SearchColumn = () => {
         Search your favorite dishes and add them to your meal plan
       </p>
       <AutoCompleteRecipe />
-      {recipeInFocus ? <RecipeCard /> : <GenerateRecipeBlock />}
+      {recipeInFocus ? <RecipeCard /> : <></>}
     </div>
   );
 };

@@ -2,18 +2,16 @@ import { useState } from "react";
 import { useAppContext } from "../contexts/App.context";
 import { generateRecipe } from "../services/API.service";
 
-const useGenerateRecipe = (titleRef: React.RefObject<HTMLInputElement>) => {
+const useGenerateRecipe = (inputText: string) => {
   const { setRecipeInFocus } = useAppContext();
   const [generatingRecipe, setGeneratingRecipe] = useState(false);
 
   const handleGenerateRecipe = async () => {
-    if (!titleRef.current?.value || titleRef.current?.value.trim() === "")
-      return;
+    if (!inputText || inputText.trim() === "") return;
 
     setGeneratingRecipe(true);
 
-    const recipe = await generateRecipe(titleRef.current.value);
-    console.log({ recipe });
+    const recipe = await generateRecipe(inputText);
     setGeneratingRecipe(false);
     setRecipeInFocus(recipe);
   };
