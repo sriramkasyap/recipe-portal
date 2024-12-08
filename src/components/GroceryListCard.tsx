@@ -38,7 +38,7 @@ const GroceryListCard = () => {
                   </td>
                   <td className="p-2">
                     {item.quantity && item.quantity > 0
-                      ? `${item.quantity} `
+                      ? `${Math.round(item.quantity * 100) / 100} `
                       : ""}
                     {item.units}
                   </td>
